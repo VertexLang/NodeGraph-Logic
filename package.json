@@ -1,0 +1,54 @@
+{
+  "name": "nodegraph-logic",
+  "version": "0.1.0",
+  "description": "A small library for working with NodeGraph logic.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "lint": "ts-standard && eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "fix-lint": "ts-standard --fix",
+    "docs": "typedoc --out docs src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheDudeFromCI/Quiver.git"
+  },
+  "keywords": [
+    "node",
+    "graph"
+  ],
+  "author": "TheDudeFromCI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheDudeFromCI/Quiver/issues"
+  },
+  "homepage": "https://github.com/TheDudeFromCI/Quiver#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
+    "@types/jest": "^27.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-jest": "^25.3.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "jest": "^27.4.5",
+    "ts-node": "^10.4.0",
+    "ts-standard": "^11.0.0",
+    "typedoc-plugin-markdown": "^3.11.8",
+    "typescript": "^4.4.3"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/lib"
+  ],
+  "ts-standard": {
+    "ignore": "dist"
+  },
+  "dependencies": {
+    "ts-results": "^3.3.0"
+  }
+}
