@@ -4,6 +4,7 @@ import { Graph } from './api/Graph'
 import { IdentifierError } from './api/Errors'
 import { Err, None, Ok, Option, Result, Some } from 'ts-results'
 import { Context } from './api/Context'
+import { NodeType } from '..'
 
 /**
  * An implementation of the Graph interface.
@@ -75,8 +76,8 @@ export class GraphImpl implements Graph {
   /**
    * {@inheritdoc}
    */
-  addNode (name: string, x: number, y: number): Result<Node, IdentifierError> {
-    const nodeResult = NodeImpl.new(this, name)
+  addNode (name: string, nodeType: NodeType, x: number, y: number): Result<Node, IdentifierError> {
+    const nodeResult = NodeImpl.new(this, name, nodeType)
     if (nodeResult.err) {
       return Err(nodeResult.val)
     }

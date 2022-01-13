@@ -1,6 +1,8 @@
 import { IdentifierError, InvalidArgumentError } from './Errors'
 import { Result } from 'ts-results'
 import { Graph } from './Graph'
+import { Plug } from './Plug'
+import { NodeType } from './NodeType'
 
 /**
  * An executable function within a Node Graph.
@@ -58,6 +60,7 @@ export interface Node {
    * Gets the name of this node.
    *
    * @remarks
+   *
    * This is used as the unquie identifier of the node within a graph. No two
    * nodes within a graph may have the same name. The only exception to this
    * rule is nodes within nested functions, which are considered to be part
@@ -66,6 +69,20 @@ export interface Node {
    * @returns The name.
    */
   name: () => string
+
+  /**
+   * Gets the type of this node.
+   *
+   * @remarks
+   *
+   * Each node has a defining node type that can be used to identify how the
+   * should be used. This is usually the implmenetation of that node, as well
+   * as the interface for inputs and outputs.
+   *
+   * @returns The node type.
+   * @see {@link NodeType}
+   */
+  nodeType: () => NodeType
 
   /**
    * Gets graph that this node is part of.
@@ -106,4 +123,20 @@ export interface Node {
    * @see {@link width}, {@link height}
    */
   setSize: (width: number, height: number) => Result<void, InvalidArgumentError>
+
+  /**
+   * Gets a readonly list of all input plugs on this node.
+   *
+   * @returns A readonly list of input plugs.
+   * @see {@link Plug}, {@link outputs}
+   */
+  inputs: () => readonly Plug[]
+
+  /**
+   * Gets a readonly list of all output plugs on this node.
+   *
+   * @returns A readonly list of output plugs.
+   * @see {@link Plug}, {@link inputs}
+   */
+  outputs: () => readonly Plug[]
 }

@@ -2,6 +2,7 @@ import { Node } from './Node'
 import { Option, Result } from 'ts-results'
 import { IdentifierError } from './Errors'
 import { Context } from './Context'
+import { NodeType } from './NodeType'
 
 /**
  * A container for a set of function nodes to show relationships.
@@ -54,14 +55,17 @@ export interface Graph {
   /**
    * Creates a new node within this graph.
    *
-   * @param name - The name of this node.
+   * @param name - The name of the node.
+   * @param nodeType - The type of this node.
    * @param x - The x position of this node in world units.
    * @param y - The y position of this node in world units.
    *
    * @returns The newly created node, or an {@link IdentifierError} if there is
    *          already a node with the given name.
+   *
+   * @see {@link NodeType}
    */
-  addNode: (name: string, x: number, y: number) => Result<Node, IdentifierError>
+  addNode: (name: string, nodeType: NodeType, x: number, y: number) => Result<Node, IdentifierError>
 
   /**
    * Finds a node in this graph with the given name.

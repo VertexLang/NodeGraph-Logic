@@ -2,6 +2,9 @@ import { Err, Ok, Result } from 'ts-results'
 import { Node } from './api/Node'
 import { IdentifierError, InvalidArgumentError } from './api/Errors'
 import { Graph } from './api/Graph'
+import { NodeType } from './api/NodeType'
+import { Plug } from './api/Plug'
+import { PlugImpl } from './PlugImpl'
 
 /**
  * An implementation of the Node interface.
@@ -11,6 +14,9 @@ import { Graph } from './api/Graph'
  */
 export class NodeImpl implements Node {
   private readonly _graph: Graph
+  private readonly _nodeType: NodeType
+  private readonly _inputs: Plug[] = []
+  private readonly _outputs: Plug[] = []
   private _name = ''
   private _x = 0
   private _y = 0
@@ -22,15 +28,34 @@ export class NodeImpl implements Node {
    *
    * @param graph - The graph that the node is being created in.
    * @param name - The name of this node.
+   * @param nodeType - The type of node to create.
    * @returns The new node, or an IdentifierError if there is already a node in
    *          the provided graph with the given name.
    */
-  static new (graph: Graph, name: string): Result<NodeImpl, IdentifierError> {
-    const node = new NodeImpl(graph)
+  static new (graph: Graph, name: string, nodeType: NodeType): Result<NodeImpl, IdentifierError> {
+    const node = new NodeImpl(graph, nodeType)
 
     const result = node.rename(name)
     if (result.err) {
       return Err(result.val)
+    }
+
+    for (const input of nodeType.inputs()) {
+      const plug = PlugImpl.new(input, node, true)
+      if (plug.err) {
+        return Err(plug.val)
+      }
+
+      node._inputs.push(plug.val)
+    }
+
+    for (const output of nodeType.outputs()) {
+      const plug = PlugImpl.new(output, node, false)
+      if (plug.err) {
+        return Err(plug.val)
+      }
+
+      node._outputs.push(plug.val)
     }
 
     return Ok(node)
@@ -40,9 +65,11 @@ export class NodeImpl implements Node {
    * Creates an instance of NodeImpl.
    *
    * @param graph - The graph that this node is being created in.
+   * @param nodeType - The node type that this node extends from.
    */
-  private constructor (graph: Graph) {
+  private constructor (graph: Graph, nodeType: NodeType) {
     this._graph = graph
+    this._nodeType = nodeType
   }
 
   /**
@@ -83,6 +110,13 @@ export class NodeImpl implements Node {
   /**
    * {@inheritdoc}
    */
+  nodeType (): NodeType {
+    return this._nodeType
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   graph (): Graph {
     return this._graph
   }
@@ -118,5 +152,19 @@ export class NodeImpl implements Node {
     this._width = width
     this._height = height
     return Ok.EMPTY
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  inputs (): readonly Plug[] {
+    return this._inputs
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  outputs (): readonly Plug[] {
+    return this._outputs
   }
 }
